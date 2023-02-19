@@ -55,33 +55,33 @@ module.exports = {
     },
 
     //ADD Friend
-    addFriend(req, res) {
-        User.findOneAndUpdate(
+        addFriend(req, res) {
+            User.findOneAndUpdate(
             { _id: req.params.userId },
             { $addToSet: { friends: req.params.friendId } },
-            { runValidators: true, new:true }
-        )
-        .then((user) => 
-        !user
-            ? res.status(404).json({ message: "User with that ID does not exist" })
-            : res.status(user)
-        )
-        .catch((err) => res.status(500).json(err));
-    },
-
-    // DELETE Friend
-        deleteFriend(req,res) {
-            User.findOneAndUpdate(
-                { _id: req.params.userId },
-                { $pull: { friends: req.params.friendId } },
-                { new: true }
+            { runValidators: true, new: true }
             )
             .then((user) =>
-            !user
+                !user
                 ? res.status(404).json({ message: "User with that ID does not exist" })
-                : res.status(user)
+                : res.json(user)
             )
             .catch((err) => res.status(500).json(err));
-        }
+        },
 
+    // DELETE Friend
+        deleteFriend(req, res) {
+            User.findOneAndUpdate(
+            { _id: req.params.userId },
+            { $pull: { friends: req.params.friendId } },
+            { new: true }
+            )
+            .then(
+                (user) =>
+                !user
+                    ? res.status(404).json({ message: "User with that ID does not exist" })
+                    : res.json(user)
+            )
+            .catch((err) => res.status(500).json(err));
+        },
 };
