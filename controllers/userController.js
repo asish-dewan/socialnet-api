@@ -27,6 +27,15 @@ module.exports = {
         .catch((err) => res.status(500).json(err));
     },
 
+    //UPDATE user
+    updateUser(req,res) {
+        User.findOneAndUpdate(
+            { _id: req.params.userId },
+            { $set: req.body },
+            { runValidators: true, new: true }
+        )
+    },
+
     // DELETE user 
     deleteUser(req, res) {
         User.findOneAndDelete({ _id: req.params.userId })
@@ -38,4 +47,35 @@ module.exports = {
             .then(() => res.json({ message: `User deleted!`}))
             .catch((err) => res.status(500).json(err));
     },
+
+    //ADD Friend
+    addFriend(req, res) {
+        User.findOneAndUpdate(
+            { _id: req.params.userId },
+            { $addToSet: { friends: req.params.friendId } },
+            { runValidators: true, new:true }
+        )
+        .then((user) => 
+        !user
+            ? res.status(404).json({ message: "User with that ID does not exist" })
+            : res.status(user)
+        )
+        .catch((err) => res.status(500).json(err));
+    },
+
+    // DELETE Friend
+        deleteFriend(req,res) {
+            User.findOneAndUpdate(
+                { _id: req.params.userId },
+                { $pull: { friends: req.params.friendId } },
+                { new: true }
+            )
+            .then((user) =>
+            !user
+                ? res.status(404).json({ message: "User with that ID does not exist" })
+                : res.status(user)
+            )
+            .catch((err) => res.status(500).json(err));
+        }
+
 };
