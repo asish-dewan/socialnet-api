@@ -3,7 +3,7 @@ const { User, Thought } = require('../models');
 module.exports = {
     // GET all users
     getUsers(req, res) {
-        User.find()
+        User.find({})
             .then((users) => res.json(users))
             .catch((err) => res.status(500).json(err));
     },
@@ -34,6 +34,12 @@ module.exports = {
             { $set: req.body },
             { runValidators: true, new: true }
         )
+        .then((user) =>
+        !user
+            ? res.status(404).json({ message: "User with that ID does not exist" })
+            : res.json(user)
+        )
+        .catch((err) => res.status(500).json(err));
     },
 
     // DELETE user 
