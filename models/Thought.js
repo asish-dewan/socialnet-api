@@ -13,12 +13,12 @@ const reactionSchema = new Schema (
         reactionBody: {
             type: String,
             required: true,
-            maxlength: 280
+            maxlength: 280,
         },
 
         username: {
             type: String,
-            required: true
+            required: true,
         },
 
         createdAt: {
@@ -27,43 +27,39 @@ const reactionSchema = new Schema (
         },
     },
     {
-        toJSON: true,
-        getters: true,
-        timestamps: true
+        toJSON: {
+            virtuals: true,
+            getters: true,
+        },
+        id:false
     }
 )
 
 const thoughtSchema = new Schema (
     {
-
-    thoughtText: {
-        type: String,
-        required: true,
-        minlength: 1,
-        maxlength: 280,
-    },
-
-    createdAt: {
-        type: Date,
-        default: Date.now,
-        get: (timestamp) => dateFormat(timestamp),
-    },
-
-    username: {
-        type: String,
-        required: true,
-    },
-
-    reactions: [reactionSchema],
-    },
-    {
-        toJSON: {
-            virtuals: true,
-            getters: true
+        thoughtText: {
+            type: String,
+            required: true,
+            minlength: 1,
+            maxlength: 280,
         },
-        
-        id: false,
-    },
+        createdAt: {
+            type: Date,
+            default: Date.now,
+        },
+        username: {
+            type: String,
+            required: true,
+        },
+        reactions: [reactionSchema],
+        },
+        {
+            toJSON: {
+                virtuals: true,
+                getters: true,
+            },
+            id: false,
+    }
 )
 
 
